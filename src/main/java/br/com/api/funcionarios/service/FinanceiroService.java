@@ -2,6 +2,7 @@ package br.com.api.funcionarios.service;
 
 import br.com.api.funcionarios.model.CargoModel;
 import br.com.api.funcionarios.model.FuncionarioModel;
+import br.com.api.funcionarios.model.FuncionarioResponseModel;
 import br.com.api.funcionarios.model.VendaModel;
 import br.com.api.funcionarios.repository.FuncionarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,9 @@ public class FinanceiroService {
 
     @Autowired
     private FuncionarioRepository funcionarioRepository;
+
+    @Autowired
+    private FuncionarioResponseModel funcionarioResponseModel;
 
     @Autowired
     private  FuncionarioService funcionarioService;
@@ -143,5 +147,38 @@ public class FinanceiroService {
         }
 
         return totalBeneficios;
+    }
+
+    public FuncionarioModel funcionarioMaiorSalario(List<Long> funcionarioIds, int mes, int ano){
+
+        double maiorSalario = 0;
+        FuncionarioModel funcionarioFiltrado = new FuncionarioModel();
+        for (Long funcionarioId: funcionarioIds) {
+
+            double salario = calcSalario(funcionarioId, mes, ano);
+            if(salario > maiorSalario){
+                funcionarioFiltrado.setId(funcionarioId);
+            }
+        }
+        funcionarioFiltrado = funcionarioService.getById(funcionarioFiltrado.getId());
+
+        return funcionarioFiltrado;
+    }
+
+    public FuncionarioModel funcionarioMaiorBeneficio(List<Long> funcionarioIds, int mes, int ano){
+
+        double maiorBeneficio = 0;
+        FuncionarioModel funcionarioFiltrado = new FuncionarioModel();
+        for (Long funcionarioId: funcionarioIds) {
+
+            double beneficio = calcBeneficio(funcionarioId, mes, ano);
+            if(beneficio > maiorBeneficio){
+                maiorBeneficio = beneficio;
+                funcionarioFiltrado.setId(funcionarioId);
+            }
+        }
+        funcionarioFiltrado = funcionarioService.getById(funcionarioFiltrado.getId());
+
+        return funcionarioFiltrado;
     }
 }
