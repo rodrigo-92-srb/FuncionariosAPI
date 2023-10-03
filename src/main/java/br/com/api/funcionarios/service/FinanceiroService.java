@@ -2,9 +2,7 @@ package br.com.api.funcionarios.service;
 
 import br.com.api.funcionarios.model.CargoModel;
 import br.com.api.funcionarios.model.FuncionarioModel;
-import br.com.api.funcionarios.model.FuncionarioResponseModel;
 import br.com.api.funcionarios.model.VendaModel;
-import br.com.api.funcionarios.repository.FuncionarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,12 +12,6 @@ import java.util.List;
 
 @Service
 public class FinanceiroService {
-
-    @Autowired
-    private FuncionarioRepository funcionarioRepository;
-
-    @Autowired
-    private FuncionarioResponseModel funcionarioResponseModel;
 
     @Autowired
     private  FuncionarioService funcionarioService;
@@ -174,6 +166,23 @@ public class FinanceiroService {
             double beneficio = calcBeneficio(funcionarioId, mes, ano);
             if(beneficio > maiorBeneficio){
                 maiorBeneficio = beneficio;
+                funcionarioFiltrado.setId(funcionarioId);
+            }
+        }
+        funcionarioFiltrado = funcionarioService.getById(funcionarioFiltrado.getId());
+
+        return funcionarioFiltrado;
+    }
+
+    public FuncionarioModel funcionarioMaiorVenda(List<Long> funcionarioIds, int mes, int ano){
+
+        double maiorVenda = 0;
+        FuncionarioModel funcionarioFiltrado = new FuncionarioModel();
+        for (Long funcionarioId: funcionarioIds) {
+            LocalDate dataVenda = createData(mes, ano);
+            double venda = calcTotalVendasByFuncionarioAndData(funcionarioId, dataVenda);
+            if(venda > maiorVenda){
+                maiorVenda = venda;
                 funcionarioFiltrado.setId(funcionarioId);
             }
         }

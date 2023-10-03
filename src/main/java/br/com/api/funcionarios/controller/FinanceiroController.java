@@ -62,4 +62,13 @@ public class FinanceiroController {
         return financeiroService.funcionarioMaiorBeneficio(funcionarioList, mes, ano);
     }
 
+    // 6- Recebe uma lista de vendedores, mês e ano e retorna o que mais vendeu no mês.
+    @GetMapping("maior-vendedor-list")
+    public FuncionarioModel filtraMaiorVendedor(@RequestParam(name = "mes") int mes,
+                                                 @RequestParam(name = "ano") int ano,
+                                                 @RequestParam(name = "listaFunc") List<Long> funcionarioList){
+
+        return financeiroService.funcionarioMaiorVenda(funcionarioList, mes, ano);
+    }
+
 }
