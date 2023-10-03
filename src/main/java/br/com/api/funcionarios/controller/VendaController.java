@@ -5,8 +5,11 @@ import br.com.api.funcionarios.model.VendaResponseModel;
 import br.com.api.funcionarios.service.FuncionarioService;
 import br.com.api.funcionarios.service.VendaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
 
 @RestController
 @CrossOrigin(origins = "*")
@@ -27,6 +30,17 @@ public class VendaController {
     @GetMapping("/list")
     public Iterable<VendaModel> list(){
         return vendaService.list();
+    }
+
+    @GetMapping("/listByFuncionarioId/{id}")
+    public Iterable<VendaModel> listByFuncionarioId(@PathVariable Long id){
+        return vendaService.listByFuncionario(id);
+    }
+
+    @GetMapping("/listByFuncionarioIdAndDataVenda/{id}")
+    public Iterable<VendaModel> listByFuncionarioId(@PathVariable Long id,
+                                                    @RequestParam(name = "dataVenda") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate dataVenda){
+        return vendaService.listByFuncionarioAndDataVenda(id, dataVenda);
     }
 
     @PostMapping("/create")

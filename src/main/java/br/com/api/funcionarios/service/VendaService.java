@@ -1,5 +1,6 @@
 package br.com.api.funcionarios.service;
 
+import br.com.api.funcionarios.model.FuncionarioModel;
 import br.com.api.funcionarios.model.VendaModel;
 import br.com.api.funcionarios.model.VendaResponseModel;
 import br.com.api.funcionarios.repository.VendaRepository;
@@ -7,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
 
 @Service
 public class VendaService {
@@ -20,6 +23,16 @@ public class VendaService {
     // Método para listar todas as vendas
     public Iterable<VendaModel> list(){
         return vendaRepository.findAll();
+    }
+
+    // Método para listar todas as vendas por Funcionário
+    public Iterable<VendaModel> listByFuncionario(Long funcionarioId){
+         return vendaRepository.findByFuncionarioId(funcionarioId);
+    }
+
+    // Método para listar todas as vendas do funcionário por mês
+    public Iterable<VendaModel> listByFuncionarioAndDataVenda(Long funcionarioId, LocalDate dataVenda){
+        return vendaRepository.findByFuncionarioIdAndDataVenda(funcionarioId, dataVenda);
     }
 
     // Método para cadastro ou alteração de venda
