@@ -1,6 +1,5 @@
 package br.com.api.funcionarios.service;
 
-import br.com.api.funcionarios.model.FuncionarioModel;
 import br.com.api.funcionarios.model.VendaModel;
 import br.com.api.funcionarios.model.VendaResponseModel;
 import br.com.api.funcionarios.repository.VendaRepository;
@@ -46,11 +45,6 @@ public class VendaService {
         } else if (vendaModel.getDataVenda() == null) {
 
             vendaResponseModel.setMessage("A data da venda é obrigatória!");
-            return new ResponseEntity<VendaResponseModel>(vendaResponseModel, HttpStatus.BAD_REQUEST);
-
-        } else if (vendaModel.getValor() == null) {
-
-            vendaResponseModel.setMessage("O valor da venda é obrigatório!");
             return new ResponseEntity<VendaResponseModel>(vendaResponseModel, HttpStatus.BAD_REQUEST);
 
         } else {

@@ -30,21 +30,6 @@ public class CargoService {
             cargoResponseModel.setMessage("Nome do cargo é obrigatório!");
             return new ResponseEntity<CargoResponseModel>(cargoResponseModel, HttpStatus.BAD_REQUEST);
 
-        } else if (cargoModel.getBeneficioAnual() == null) {
-
-            cargoResponseModel.setMessage("O valor do benefício anual é obrigatório!");
-            return new ResponseEntity<CargoResponseModel>(cargoResponseModel, HttpStatus.BAD_REQUEST);
-
-        } else if (cargoModel.getBeneficioPercentual() == null) {
-
-            cargoResponseModel.setMessage("O valor do benefício percentual é obrigatório!");
-            return new ResponseEntity<CargoResponseModel>(cargoResponseModel, HttpStatus.BAD_REQUEST);
-
-        } else if (cargoModel.getSalarioBase() == null) {
-
-            cargoResponseModel.setMessage("O valor do salário base é obrigatório!");
-            return new ResponseEntity<CargoResponseModel>(cargoResponseModel, HttpStatus.BAD_REQUEST);
-
         } else {
             if(action.equals("create")){
                 return new ResponseEntity<CargoModel>(cargoRespository.save(cargoModel), HttpStatus.CREATED);

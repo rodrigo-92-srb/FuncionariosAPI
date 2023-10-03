@@ -1,10 +1,10 @@
 package br.com.api.funcionarios.model;
 
+import com.sun.istack.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
@@ -22,6 +22,7 @@ public class VendaModel {
 
     private LocalDate dataVenda;
 
-    private BigDecimal valor;
+    @NotNull
+    private double valor;
 
 }

@@ -1,10 +1,10 @@
 package br.com.api.funcionarios.model;
 
+import com.sun.istack.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
 
 @Entity
 @Table(name = "cargo")
@@ -16,12 +16,16 @@ public class CargoModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull
     private String nome;
 
-    private BigDecimal salarioBase;
+    @NotNull
+    private double salarioBase;
 
-    private BigDecimal beneficioAnual;
+    @NotNull
+    private double beneficioAnual;
 
-    private BigDecimal beneficioPercentual;
+    @NotNull
+    private double beneficioPercentual;
 
 }

@@ -7,7 +7,6 @@ import br.com.api.funcionarios.repository.FuncionarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.List;
@@ -24,14 +23,14 @@ public class FinanceiroService {
     @Autowired
     private VendaService vendaService;
 
-    public BigDecimal calcTotalVendasByFuncionarioAndData(Long funcionarioId, LocalDate dataAnalisada){
+    public double calcTotalVendasByFuncionarioAndData(Long funcionarioId, LocalDate dataAnalisada){
 
         Iterable<VendaModel> vendaModelList = vendaService.listByFuncionarioAndDataVenda(funcionarioId, dataAnalisada);
 
-        BigDecimal totalVendas = BigDecimal.valueOf(0);
+        double totalVendas = 0;
 
         for (VendaModel vendaModel: vendaModelList) {
-            totalVendas = totalVendas.add(vendaModel.getValor());
+            totalVendas = totalVendas + vendaModel.getValor();
         }
 
         return totalVendas;
@@ -48,7 +47,7 @@ public class FinanceiroService {
         return LocalDate.of(ano,mes,1);
     }
 
-    public BigDecimal calcValorTotalPagobyFuncionario(Long funcionarioId, int mes, int ano){
+    public double calcValorTotalPagobyFuncionario(Long funcionarioId, int mes, int ano){
 
         FuncionarioModel funcionario = funcionarioService.getById(funcionarioId);
 
@@ -56,33 +55,34 @@ public class FinanceiroService {
 
         LocalDate dataAnalisada = createData(mes, ano);
 
-        BigDecimal salario = calcSalario(funcionarioId, mes, ano);
+        double salario = calcSalario(funcionarioId, mes, ano);
 
-        BigDecimal valorVendido = calcTotalVendasByFuncionarioAndData(funcionarioId, dataAnalisada);
+        double valorVendido = calcTotalVendasByFuncionarioAndData(funcionarioId, dataAnalisada);
 
-        BigDecimal beneficio;
+        double beneficio;
 
         if(funcionario.getCargo().getId() == 1){
-            beneficio = cargo.getBeneficioPercentual().multiply(salario).divide(BigDecimal.valueOf(100));
+            beneficio = (cargo.getBeneficioPercentual() * salario)/100;
         } else if (funcionario.getCargo().getId() == 2) {
-            beneficio = cargo.getBeneficioPercentual().multiply(valorVendido).divide(BigDecimal.valueOf(100));
+            beneficio = (cargo.getBeneficioPercentual()*valorVendido)/100;
         } else {
-            beneficio = BigDecimal.valueOf(0);
+            beneficio = 0;
         }
-        BigDecimal ValorTotal = salario.add(beneficio);
+        double ValorTotal = salario + beneficio;
+
         return ValorTotal;
     }
 
-    public BigDecimal calcValorTotalPagoByList(List<Long> funcionarioIds, int mes, int ano){
+    public double calcValorTotalPagoByList(List<Long> funcionarioIds, int mes, int ano){
 
-        BigDecimal valorTotalLista = BigDecimal.valueOf(0);
+        double valorTotalLista = 0;
         for (Long funcionarioId: funcionarioIds) {
-            valorTotalLista = valorTotalLista.add(calcValorTotalPagobyFuncionario(funcionarioId, mes, ano));
+            valorTotalLista = valorTotalLista + calcValorTotalPagobyFuncionario(funcionarioId, mes, ano);
         }
         return valorTotalLista;
     }
 
-    public BigDecimal calcSalario(Long funcionarioId, int mes, int ano){
+    public double calcSalario(Long funcionarioId, int mes, int ano){
 
         FuncionarioModel funcionario = funcionarioService.getById(funcionarioId);
 
@@ -92,26 +92,26 @@ public class FinanceiroService {
 
         int anosContratado = calcDiferencaAnual(funcionario.getDataContratacao(), dataAnalisada);
 
-        BigDecimal beneficioAnual = cargo.getBeneficioAnual().multiply(BigDecimal.valueOf(anosContratado));
+        double beneficioAnual = cargo.getBeneficioAnual() * anosContratado;
 
-        BigDecimal salario = cargo.getSalarioBase().add(beneficioAnual);
+        double salario = cargo.getSalarioBase() + beneficioAnual;
 
         return salario;
 
     }
 
-    public BigDecimal calcTotalSalariosByList(List<Long> funcionarioIds, int mes, int ano){
+    public double calcTotalSalariosByList(List<Long> funcionarioIds, int mes, int ano){
 
-        BigDecimal salarioTotalLista = BigDecimal.valueOf(0);
+        double salarioTotalLista = 0;
 
         for (Long funcionarioId: funcionarioIds) {
-            salarioTotalLista = salarioTotalLista.add(calcSalario(funcionarioId, mes, ano));
+            salarioTotalLista = salarioTotalLista + calcSalario(funcionarioId, mes, ano);
         }
 
         return salarioTotalLista;
     }
 
-    public BigDecimal calcBeneficio(Long funcionarioId, int mes, int ano){
+    public double calcBeneficio(Long funcionarioId, int mes, int ano){
 
         FuncionarioModel funcionario = funcionarioService.getById(funcionarioId);
 
@@ -119,27 +119,27 @@ public class FinanceiroService {
 
         LocalDate dataAnalisada = createData(mes, ano);
 
-        BigDecimal salario = calcSalario(funcionarioId, mes, ano);
+        double salario = calcSalario(funcionarioId, mes, ano);
 
-        BigDecimal valorVendido = calcTotalVendasByFuncionarioAndData(funcionarioId, dataAnalisada);
+        double valorVendido = calcTotalVendasByFuncionarioAndData(funcionarioId, dataAnalisada);
 
-        BigDecimal beneficio = BigDecimal.valueOf(0);
+        double beneficio = 0;
 
         if(funcionario.getCargo().getId() == 1){
-            beneficio = cargo.getBeneficioPercentual().multiply(salario).divide(BigDecimal.valueOf(100));
+            beneficio = (cargo.getBeneficioPercentual() * salario)/100;
         } else if (funcionario.getCargo().getId() == 2) {
-            beneficio = cargo.getBeneficioPercentual().multiply(valorVendido).divide(BigDecimal.valueOf(100));
+            beneficio = (cargo.getBeneficioPercentual() * valorVendido)/100;
         } else {
-            beneficio = BigDecimal.valueOf(0);
+            beneficio = 0;
         }
         return beneficio;
     }
 
-    public BigDecimal calcTotalBeneficiosByList(List<Long> funcionarioIds, int mes, int ano){
+    public double calcTotalBeneficiosByList(List<Long> funcionarioIds, int mes, int ano){
 
-        BigDecimal totalBeneficios = BigDecimal.valueOf(0);
+        double totalBeneficios = 0;
         for (Long funcionarioId: funcionarioIds) {
-            totalBeneficios = totalBeneficios.add(calcBeneficio(funcionarioId, mes, ano));
+            totalBeneficios = totalBeneficios + calcBeneficio(funcionarioId, mes, ano);
         }
 
         return totalBeneficios;
