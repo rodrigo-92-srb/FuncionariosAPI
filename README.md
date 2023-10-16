@@ -1,7 +1,7 @@
 # FuncionariosAPI
 API desenvolvida em Spring Boot para sistema de gerenciamento financeiro de Empresa.
 
-API documentada com Swagger
+API documentada com Swagger.
 
 ## Requirements
  - Maven
