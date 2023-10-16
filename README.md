@@ -3,6 +3,9 @@ API desenvolvida em Spring Boot para sistema de gerenciamento financeiro de Empr
 
 API documentada com Swagger.
 
+Após executar a aplicação é possível ver e testar os Endpoints da API no endereço:
+- http://localhost:8080/swagger-ui/index.html#/
+
 ## Requirements
  - Maven
  - Spring Boot
